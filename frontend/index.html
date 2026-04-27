@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="taskApp">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Manager</title>
+    <link rel="stylesheet" href="style.css">
+
+    <!-- Load AngularJS from the internet (no install needed!) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.3/angular.min.js"></script>
+</head>
+
+<!-- ng-controller tells AngularJS which controller manages this page -->
+<body ng-controller="TaskController">
+
+    <div class="container">
+        <h1>📋 My Task Manager</h1>
+
+        <!-- ── ADD TASK FORM ── -->
+        <div class="add-task-form">
+            <input
+                type="text"
+                ng-model="newTaskTitle"
+                placeholder="Enter a new task..."
+            />
+            <button ng-click="addTask()">Add Task</button>
+        </div>
+
+        <!-- ── TASK LIST ── -->
+        <ul class="task-list">
+
+            <!-- ng-repeat loops through each task and creates an <li> for it -->
+            <li ng-repeat="task in tasks" ng-class="{'completed': task.isCompleted}">
+
+                <!-- Show task title normally, OR an input if editing -->
+                <span ng-if="!task.editing" ng-click="toggleComplete(task)">
+                    {{ task.title }}
+                </span>
+                <input
+                    ng-if="task.editing"
+                    type="text"
+                    ng-model="task.title"
+                />
+
+                <!-- Action buttons -->
+                <div class="task-actions">
+                    <button ng-if="!task.editing" ng-click="startEdit(task)">✏️ Edit</button>
+                    <button ng-if="task.editing"  ng-click="saveEdit(task)">💾 Save</button>
+                    <button ng-click="deleteTask(task.id)">🗑️ Delete</button>
+                </div>
+
+            </li>
+        </ul>
+
+        <!-- Show message if no tasks exist -->
+        <p ng-if="tasks.length === 0" class="empty-msg">
+            No tasks yet! Add one above 👆
+        </p>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

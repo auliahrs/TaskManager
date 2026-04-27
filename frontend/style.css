@@ -1,0 +1,143 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background: #f0f2f5;
+    padding: 40px 20px;
+}
+
+.container {
+    max-width: 600px;
+    margin: 0 auto;
+    background: white;
+    border-radius: 12px;
+    padding: 32px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+}
+
+h1 {
+    text-align: center;
+    color: #2d3436;
+    margin-bottom: 28px;
+    font-size: 1.8rem;
+}
+
+/* ── ADD TASK FORM ── */
+.add-task-form {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 24px;
+}
+
+.add-task-form input {
+    flex: 1;
+    padding: 10px 14px;
+    border: 2px solid #dfe6e9;
+    border-radius: 8px;
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.add-task-form input:focus {
+    border-color: #6c5ce7;
+}
+
+.add-task-form button {
+    padding: 10px 20px;
+    background: #6c5ce7;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.add-task-form button:hover {
+    background: #5a4bd1;
+}
+
+/* ── TASK LIST ── */
+.task-list {
+    list-style: none;
+}
+
+.task-list li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    border: 1px solid #dfe6e9;
+    border-radius: 8px;
+    transition: background 0.2s;
+    gap: 10px;
+}
+
+.task-list li:hover {
+    background: #f8f9fa;
+}
+
+.task-list li span {
+    flex: 1;
+    font-size: 1rem;
+    color: #2d3436;
+    cursor: pointer;
+}
+
+/* Completed task styling */
+.task-list li.completed span {
+    text-decoration: line-through;
+    color: #b2bec3;
+}
+
+.task-list li input {
+    flex: 1;
+    padding: 6px 10px;
+    border: 2px solid #6c5ce7;
+    border-radius: 6px;
+    font-size: 1rem;
+    outline: none;
+}
+
+/* ── ACTION BUTTONS ── */
+.task-actions {
+    display: flex;
+    gap: 6px;
+}
+
+.task-actions button {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.task-actions button:hover {
+    opacity: 0.8;
+}
+
+.task-actions button:first-child {
+    background: #fdcb6e;
+    color: #2d3436;
+}
+
+.task-actions button:last-child {
+    background: #ff7675;
+    color: white;
+}
+
+/* ── EMPTY STATE ── */
+.empty-msg {
+    text-align: center;
+    color: #b2bec3;
+    font-size: 1rem;
+    margin-top: 20px;
+}
