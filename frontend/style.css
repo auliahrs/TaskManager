@@ -141,3 +141,66 @@ h1 {
     font-size: 1rem;
     margin-top: 20px;
 }
+
+/* ── FILTER BUTTONS ── */
+.filter-buttons {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.filter-buttons button {
+    padding: 8px 20px;
+    border: 2px solid #dfe6e9;
+    background: white;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: #636e72;
+}
+
+.filter-buttons button:hover {
+    border-color: #6c5ce7;
+    color: #6c5ce7;
+}
+
+/* The currently active filter button */
+.filter-buttons button.active-filter {
+    background: #6c5ce7;
+    border-color: #6c5ce7;
+    color: white;
+}
+
+/* ── TASK SUMMARY ── */
+.task-summary {
+    font-size: 0.85rem;
+    color: #b2bec3;
+    margin-bottom: 16px;
+}
+
+/* ── TASK MAIN (title + due date together) ── */
+.task-main {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 4px;
+}
+
+/* ── DUE DATE ── */
+.due-date {
+    font-size: 0.8rem;
+    color: #74b9ff;
+}
+
+/* ── OVERDUE ── */
+.overdue-label {
+    font-size: 0.75rem;
+    color: #ff7675;
+    font-weight: bold;
+}
+
+.task-list li.overdue {
+    border-color: #ff7675;
+    background: #fff5f5;
+}

@@ -8,13 +8,49 @@ app.controller('TaskController', function($scope, $http) {
     var apiUrl = 'http://localhost:5245/api/tasks';
 
     // ─────────────────────────────────────────
-    // LOAD all tasks when the page opens
+    // FILTER state
+    // ─────────────────────────────────────────
+    $scope.currentFilter = 'all'; // Default filter is "All"
+    $scope.filteredTasks = [];
+
+    // This function runs every time filter or tasks change
+    function applyFilter() {
+        if ($scope.currentFilter === 'all') {
+            $scope.filteredTasks = $scope.tasks;
+        } else if ($scope.currentFilter === 'active') {
+            $scope.filteredTasks = $scope.tasks.filter(function(t) {
+                return !t.isCompleted;
+            });
+        } else if ($scope.currentFilter === 'completed') {
+            $scope.filteredTasks = $scope.tasks.filter(function(t) {
+                return t.isCompleted;
+            });
+        }
+    }
+
+    // Called when a filter button is clicked
+    $scope.setFilter = function(filter) {
+        $scope.currentFilter = filter;
+        applyFilter();
+    };
+
+    // ─────────────────────────────────────────
+    // Check if a task is overdue
+    // ─────────────────────────────────────────
+    $scope.isOverdue = function(task) {
+        if (!task.dueDate || task.isCompleted) return false;
+        return new Date(task.dueDate) < new Date();
+    };
+
+    // ─────────────────────────────────────────
+    // LOAD all tasks
     // ─────────────────────────────────────────
     function loadTasks() {
         $http.get(apiUrl)
             .then(function(response) {
                 // response.data contains the JSON array from the API
                 $scope.tasks = response.data;
+                applyFilter(); // Apply filter after loading
             })
             .catch(function(error) {
                 console.error('Error loading tasks:', error);
@@ -30,7 +66,8 @@ app.controller('TaskController', function($scope, $http) {
 
         var newTask = {
             title: $scope.newTaskTitle,
-            isCompleted: false
+            isCompleted: false,
+            dueDate: $scope.newTaskDueDate ? new Date($scope.newTaskDueDate).toISOString() : null
         };
 
         // POST request: send the new task to the API
@@ -38,6 +75,8 @@ app.controller('TaskController', function($scope, $http) {
             .then(function(response) {
                 $scope.tasks.push(response.data); // Add to the list immediately
                 $scope.newTaskTitle = '';          // Clear the input box
+                $scope.newTaskDueDate = '';
+                applyFilter(); // Reapply filter after adding
             })
             .catch(function(error) {
                 console.error('Error adding task:', error);
@@ -45,13 +84,16 @@ app.controller('TaskController', function($scope, $http) {
     };
 
     // ─────────────────────────────────────────
-    // TOGGLE task complete/incomplete (click on title)
+    // TOGGLE task complete/incomplete
     // ─────────────────────────────────────────
     $scope.toggleComplete = function(task) {
         task.isCompleted = !task.isCompleted;
 
         // PUT request: update the task in the API
         $http.put(apiUrl + '/' + task.id, task)
+            .then(function() {
+                applyFilter(); // Reapply filter so task moves to correct group
+            })
             .catch(function(error) {
                 // Revert if API call fails
                 task.isCompleted = !task.isCompleted;
@@ -60,7 +102,7 @@ app.controller('TaskController', function($scope, $http) {
     };
 
     // ─────────────────────────────────────────
-    // START editing a task (show input field)
+    // EDIT a task
     // ─────────────────────────────────────────
     $scope.startEdit = function(task) {
         task.editing = true;
@@ -92,6 +134,7 @@ app.controller('TaskController', function($scope, $http) {
                 $scope.tasks = $scope.tasks.filter(function(t) {
                     return t.id !== taskId;
                 });
+                applyFilter(); // Reapply filter after deleting
             })
             .catch(function(error) {
                 console.error('Error deleting task:', error);

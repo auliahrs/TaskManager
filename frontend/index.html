@@ -23,24 +23,50 @@
                 ng-model="newTaskTitle"
                 placeholder="Enter a new task..."
             />
+            <input
+                type="date"
+                ng-model="newTaskDueDate"
+            />
             <button ng-click="addTask()">Add Task</button>
         </div>
+
+        <!-- ── FILTER BUTTONS ── -->
+        <div class="filter-buttons">
+            <button ng-click="setFilter('all')"       ng-class="{'active-filter': currentFilter === 'all'}">All</button>
+            <button ng-click="setFilter('active')"    ng-class="{'active-filter': currentFilter === 'active'}">Active</button>
+            <button ng-click="setFilter('completed')" ng-class="{'active-filter': currentFilter === 'completed'}">Completed</button>
+        </div>
+
+        <!-- Task count summary -->
+        <p class="task-summary">
+            Showing {{ filteredTasks.length }} of {{ tasks.length }} tasks
+        </p>
 
         <!-- ── TASK LIST ── -->
         <ul class="task-list">
 
             <!-- ng-repeat loops through each task and creates an <li> for it -->
-            <li ng-repeat="task in tasks" ng-class="{'completed': task.isCompleted}">
+            <li ng-repeat="task in filteredTasks" ng-class="{'completed': task.isCompleted, 'overdue': isOverdue(task)}">
 
-                <!-- Show task title normally, OR an input if editing -->
-                <span ng-if="!task.editing" ng-click="toggleComplete(task)">
-                    {{ task.title }}
-                </span>
-                <input
-                    ng-if="task.editing"
-                    type="text"
-                    ng-model="task.title"
-                />
+                <div class="task-main">
+                    <!-- Show task title normally, OR an input if editing -->
+                    <span ng-if="!task.editing" ng-click="toggleComplete(task)">
+                        {{ task.title }}
+                    </span>
+                    <input
+                        ng-if="task.editing"
+                        type="text"
+                        ng-model="task.title"
+                    />
+
+                    <!-- Due date display -->
+                    <span class="due-date" ng-if="task.dueDate">
+                        📅 {{ task.dueDate | date: 'dd MMM yyyy' }}
+                    </span>
+
+                    <!-- Overdue warning -->
+                    <span class="overdue-label" ng-if="isOverdue(task)">⚠️ Overdue</span>
+                </div>
 
                 <!-- Action buttons -->
                 <div class="task-actions">
